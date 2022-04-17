@@ -50,36 +50,12 @@ export default {
     },
     changeTable() {
       if (this.$route.path == "/smokes/floor") {
-        const build = this.$route.params.build;
-        const floor = this.$route.params.floor;
-        const rooms = this.$route.params.rooms;
-        const times = this.$route.params.times;
-        const smokeStatus = this.$route.params.smokeStatus;
         this.$router.push({
           name: "list",
-          params: {
-            build: build,
-            floor: floor,
-            rooms: rooms,
-            times: times,
-            smokeStatus: smokeStatus,
-          },
         });
       } else if (this.$route.path == "/smokes/list") {
-        const build = this.$route.params.build;
-        const floor = this.$route.params.floor;
-        const rooms = this.$route.params.rooms;
-        const times = this.$route.params.times;
-        const smokeStatus = this.$route.params.smokeStatus;
         this.$router.push({
           name: "floor",
-          params: {
-            build: build,
-            floor: floor,
-            rooms: rooms,
-            times: times,
-            smokeStatus:smokeStatus
-          },
         });
       }
     },
@@ -90,8 +66,11 @@ export default {
       window.localStorage.removeItem("times");
       window.localStorage.removeItem("smokeStatus");
     },
+    
   },
-  mounted() {
+  
+  
+  created() {
     this.isShowButton();
   },
   updated() {
@@ -99,6 +78,7 @@ export default {
   },
   destroyed() {
     this.removeBuildDataToStorage();
+    clearInterval(this.timer);
   },
 };
 </script>

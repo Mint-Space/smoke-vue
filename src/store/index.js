@@ -951,7 +951,8 @@ const buildingStore = {
         ],
       },
     ],
-    build: {}
+    build: {},
+    clickEventAndKeyboardEventCount:0
   },
   mutations: {
     GET_BUILD(state, buildConfig) {
@@ -960,11 +961,17 @@ const buildingStore = {
           state.build = state.buildingList[index].floor[buildConfig.floorIndex]
         }
       });
+    },
+    SET_CLICK_EVENT_AND_KEYBOARD_EVENT_COUNT(state,count){
+      state.clickEventAndKeyboardEventCount = count
     }
   },
   actions: {
     getBuild(context, buildConfig) {
       context.commit('GET_BUILD', buildConfig)
+    },
+    setClickEventAndKeyboardEventCount(context, count){
+      context.commit('SET_CLICK_EVENT_AND_KEYBOARD_EVENT_COUNT', count)
     }
   },
   getters: {

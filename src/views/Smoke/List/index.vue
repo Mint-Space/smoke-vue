@@ -182,9 +182,9 @@ export default {
       if (smokeStatus === 0) {
         return "正常";
       } else if (smokeStatus === 1) {
-        return "亏电";
-      } else if (smokeStatus === 2) {
         return "离线";
+      } else if (smokeStatus === 2) {
+        return "亏电";
       } else if (smokeStatus === 3) {
         return "拆除";
       } else if (smokeStatus === 4) {
@@ -223,11 +223,11 @@ export default {
         this.dialogVisible = true;
         if (row.smokeStatus == 1) {
           this.dialogTitle =
-            row.build + row.floor + row.room + "位置亏电" + info;
+            row.build + row.floor + row.room + "位置离线" + info;
           this.isShowAlarm = false;
         } else if (row.smokeStatus == 2) {
           this.dialogTitle =
-            row.build + row.floor + row.room + "位置离线" + info;
+            row.build + row.floor + row.room + "位置亏电" + info;
           this.isShowAlarm = false;
         } else if (row.smokeStatus == 3) {
           this.dialogTitle =
@@ -423,6 +423,7 @@ export default {
       return this.buildData;
     },
   },
+  
   created() {
     const build = window.localStorage.getItem("build");
     if ((build === "undefined") | (build === "") | (build === null)) {
@@ -436,7 +437,8 @@ export default {
     }
   },
   mounted() {},
-  updated() {},
+  updated() {
+  },
   destroyed() {},
 };
 </script>

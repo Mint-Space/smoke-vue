@@ -70,7 +70,12 @@
         <el-button type="warning" @click="dialogVisible = false"
           >复位</el-button
         >
-        <el-button type="danger" @click="dialogVisible = false" v-show="isShowAlarm">消音</el-button>
+        <el-button
+          type="danger"
+          @click="dialogVisible = false"
+          v-show="isShowAlarm"
+          >消音</el-button
+        >
         <el-button type="primary" @click="dialogVisible = false"
           >确 定</el-button
         >
@@ -109,7 +114,8 @@ export default {
       corridors: [],
       dialogVisible: false,
       dialogTitle: "",
-      isShowAlarm: false
+      isShowAlarm: false,
+      count: this.clickEventAndKeyboardEventCount | 0,
     };
   },
   methods: {
@@ -138,23 +144,23 @@ export default {
         if (room.smokeStatus == 1) {
           this.dialogTitle =
             buildName + floorName + room.room + "位置离线" + info;
-            this.isShowAlarm = false
+          this.isShowAlarm = false;
         } else if (room.smokeStatus == 2) {
           this.dialogTitle =
             buildName + floorName + room.room + "位置亏电" + info;
-            this.isShowAlarm = false
+          this.isShowAlarm = false;
         } else if (room.smokeStatus == 3) {
           this.dialogTitle =
             buildName + floorName + room.room + "位置拆除" + info;
-            this.isShowAlarm = false
+          this.isShowAlarm = false;
         } else if (room.smokeStatus == 4) {
           this.dialogTitle =
             buildName + floorName + room.room + "位置火警" + info;
-            this.isShowAlarm = true
-        }else {
+          this.isShowAlarm = true;
+        } else {
           this.dialogTitle =
             buildName + floorName + room.room + "位置设备异常" + info;
-            this.isShowAlarm = false
+          this.isShowAlarm = false;
         }
       }
     },
@@ -327,6 +333,7 @@ export default {
       this.roomEven = this.getRoomEven(rooms);
       this.roomSingular = this.getRoomSingular(rooms);
     },
+    
   },
   created() {
     const build = window.localStorage.getItem("build");

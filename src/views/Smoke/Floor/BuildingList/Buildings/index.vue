@@ -47,6 +47,7 @@ export default {
       return this.$store.state.buildingStore.build;
     },
     setBuild(buildName, floorIndex) {
+      this.count++;
       const buildConfig = {
         buildName,
         floorIndex,
@@ -57,8 +58,12 @@ export default {
       });
     },
   },
+  
+  
   created() {
     this.buildingList = this.getBuildingList();
+  },
+  updated() {
   },
 };
 </script>
