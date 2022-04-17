@@ -41,6 +41,7 @@ export default {
   width: 100%;
   .el-aside {
     width: auto;
+    overflow: hidden;
   }
   .el-main {
     // width: auto;

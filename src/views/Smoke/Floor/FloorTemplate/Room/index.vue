@@ -28,6 +28,7 @@ export default {
       time: this.room.time,
       color: "rgb(55, 172, 107)",
       animationPlay: "paused",
+      opacity:'1'
     };
   },
   computed: {
@@ -35,6 +36,7 @@ export default {
       return {
         "--color": this.color,
         "--animationPlay": this.animationPlay,
+        '--opacity': this.opacity
       };
     },
   },
@@ -42,6 +44,7 @@ export default {
     alarm() {
       if (this.alarmStatus === 0) {
         this.animationPlay = "paused";
+        this.opacity = '1'
         this.color = "rgb(55, 172, 107)";
       } else if (this.alarmStatus === 1) {
         this.animationPlay = "running";
@@ -58,6 +61,7 @@ export default {
       } else {
         this.color = "rgb(218, 218, 218)";
         this.animationPlay = "paused";
+        this.opacity = '1'
       }
     },
   },
@@ -92,9 +96,10 @@ export default {
   color: #fff;
   padding-right: 10px;
   padding-left: 10px;
+  opacity: var(--opacity);
   &:hover {
-    opacity: 100;
     animation-play-state: paused;
+    opacity: 1;
     box-shadow: 3px 5px 15px rgb(218, 211, 211);
   }
 }

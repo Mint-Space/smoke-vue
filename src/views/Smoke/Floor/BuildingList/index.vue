@@ -1,7 +1,5 @@
 <template>
-  <div >
-      <c-building class="box"></c-building>
-  </div>
+  <c-building class="box"></c-building>
 </template>
 
 <script>

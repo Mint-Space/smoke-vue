@@ -58,13 +58,11 @@ export default {
       });
     },
   },
-  
-  
+
   created() {
     this.buildingList = this.getBuildingList();
   },
-  updated() {
-  },
+  updated() {},
 };
 </script>
 

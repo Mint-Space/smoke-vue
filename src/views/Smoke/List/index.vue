@@ -1,97 +1,101 @@
 <template>
   <div class="table-box">
-    <el-table :data="buildData" border style="width: 100%" height="100%">
-      <el-table-column align="center" type="index" width="50">
-      </el-table-column>
-      <el-table-column
-        align="center"
-        prop="build"
-        label="建筑名称"
-        width="auto"
-      >
-      </el-table-column>
-      <el-table-column
-        align="center"
-        prop="floor"
-        label="烟感手报楼层"
-        width="auto"
-      >
-      </el-table-column>
-      <el-table-column
-        align="center"
-        prop="room"
-        label="烟感手报位置"
-        width="auto"
-      >
-      </el-table-column>
-      <el-table-column
-        align="center"
-        prop="time"
-        label="设备联网时间"
-        width="auto"
-      >
-      </el-table-column>
-      <el-table-column
-        align="center"
-        prop="deviceTypeTitle"
-        label="设备类型"
-        width="auto"
-      >
-      </el-table-column>
-      <el-table-column align="center">
-        <template slot="header" slot-scope="scope">
-          <div class="search">
-            <el-input
-              v-model="search"
-              size="mini"
-              placeholder="输入关键字搜索"
-              suffix-icon="el-icon-search"
-              @keyup.native.enter="searchKey(scope.$index, scope.column)"
-            >
-              <el-button
-                size="mini"
-                slot="append"
-                @click="searchKey(scope.$index, scope.column)"
-                >搜索</el-button
-              >
-            </el-input>
-          </div>
-        </template>
-        <template slot-scope="scope">
-          <el-tag
-            :type="smokeStatusValue(scope.$index)"
-            :style="cssVars"
-            @click="optionSmokeStatus(scope.row)"
-            effect="dark"
+    <div class="scrollbar-table">
+      <el-scrollbar style="height: 100%">
+        <el-table :data="buildData" border style="width: 100%" height="100%">
+          <el-table-column align="center" type="index" width="50">
+          </el-table-column>
+          <el-table-column
+            align="center"
+            prop="build"
+            label="建筑名称"
+            width="auto"
           >
-            {{ smokeStatusTitle(scope.$index) }}
-          </el-tag>
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-dialog
-      title="烟雾报警器 | 火灾手动报警按钮 现在运行状态"
-      :visible.sync="dialogVisible"
-      width="35%"
-      :before-close="handleClose"
-    >
-      <span>{{ dialogTitle }}</span>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="warning" @click="dialogVisible = false"
-          >复位</el-button
+          </el-table-column>
+          <el-table-column
+            align="center"
+            prop="floor"
+            label="烟感手报楼层"
+            width="auto"
+          >
+          </el-table-column>
+          <el-table-column
+            align="center"
+            prop="room"
+            label="烟感手报位置"
+            width="auto"
+          >
+          </el-table-column>
+          <el-table-column
+            align="center"
+            prop="time"
+            label="设备联网时间"
+            width="auto"
+          >
+          </el-table-column>
+          <el-table-column
+            align="center"
+            prop="deviceTypeTitle"
+            label="设备类型"
+            width="auto"
+          >
+          </el-table-column>
+          <el-table-column align="center">
+            <template slot="header" slot-scope="scope">
+              <div class="search">
+                <el-input
+                  v-model="search"
+                  size="mini"
+                  placeholder="输入关键字搜索"
+                  suffix-icon="el-icon-search"
+                  @keyup.native.enter="searchKey(scope.$index, scope.column)"
+                >
+                  <el-button
+                    size="mini"
+                    slot="append"
+                    @click="searchKey(scope.$index, scope.column)"
+                    >搜索</el-button
+                  >
+                </el-input>
+              </div>
+            </template>
+            <template slot-scope="scope">
+              <el-tag
+                :type="smokeStatusValue(scope.$index)"
+                :style="cssVars"
+                @click="optionSmokeStatus(scope.row)"
+                effect="dark"
+              >
+                {{ smokeStatusTitle(scope.$index) }}
+              </el-tag>
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-dialog
+          title="烟雾报警器 | 火灾手动报警按钮 现在运行状态"
+          :visible.sync="dialogVisible"
+          width="35%"
+          :before-close="handleClose"
         >
-        <el-button
-          type="danger"
-          @click="dialogVisible = false"
-          v-show="isShowAlarm"
-          >消音</el-button
-        >
-        <el-button type="primary" @click="dialogVisible = false"
-          >确 定</el-button
-        >
-      </span>
-    </el-dialog>
+          <span>{{ dialogTitle }}</span>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible = false">取 消</el-button>
+            <el-button type="warning" @click="dialogVisible = false"
+              >复位</el-button
+            >
+            <el-button
+              type="danger"
+              @click="dialogVisible = false"
+              v-show="isShowAlarm"
+              >消音</el-button
+            >
+            <el-button type="primary" @click="dialogVisible = false"
+              >确 定</el-button
+            >
+          </span>
+        </el-dialog>
+      </el-scrollbar>
+    </div>
   </div>
 </template>
 
@@ -423,7 +427,7 @@ export default {
       return this.buildData;
     },
   },
-  
+
   created() {
     const build = window.localStorage.getItem("build");
     if ((build === "undefined") | (build === "") | (build === null)) {
@@ -437,13 +441,12 @@ export default {
     }
   },
   mounted() {},
-  updated() {
-  },
+  updated() {},
   destroyed() {},
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="less" >
 .table-box {
   width: 100%;
   height: 100%;
@@ -465,6 +468,18 @@ export default {
 }
 .dialog-footer {
 }
+/* scoped 需要去掉,不去掉,下面overflow-x: hidden;不会生效 */
+.scrollbar-table {
+  margin: 0 auto;
+  width: 100%;
+  height: 100%;
+  background-color: #eee;
+  /* 需要在外层套一个div,切记命名特殊一点,防止因缺少scoped，对其他页面会有冲突 */
+  .el-scrollbar__wrap {
+    overflow-x: hidden;
+  }
+}
+
 @keyframes blink {
   0% {
     opacity: 100;

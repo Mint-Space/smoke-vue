@@ -20,7 +20,8 @@ import {
     BreadcrumbItem,
     Tag,
     Dialog,
-    MessageBox
+    MessageBox,
+    Scrollbar
 } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
@@ -45,3 +46,4 @@ Vue.use(BreadcrumbItem)
 Vue.use(Tag)
 Vue.use(Dialog)
 Vue.prototype.$confirm=MessageBox.confirm;
+Vue.use(Scrollbar)

@@ -1,7 +1,11 @@
 <template>
   <el-row>
     <el-col :span="5">
-      <c-building-list class="list"></c-building-list>
+      <div class="scrollbar-building">
+        <el-scrollbar style="height: 100%">
+          <c-building-list></c-building-list>
+        </el-scrollbar>
+      </div>
     </el-col>
     <el-col :span="14">
       <c-rooms class="map"></c-rooms>
@@ -26,7 +30,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="less" >
 .el-row {
   width: 100%;
   height: 100%;
@@ -37,13 +41,17 @@ export default {
   justify-content: center;
   align-items: center;
   height: 100%;
-  .list {
-    height: 90%;
-    overflow-y: scroll;
-  }
-  .map{
+  .map {
     margin-left: 20px;
     margin-right: 20px;
+  }
+  .scrollbar-building {
+    width: auto;
+    height: 100%;
+    .el-scrollbar__wrap {
+      overflow-x: hidden;
+      height: 110%;
+    }
   }
 }
 </style>
