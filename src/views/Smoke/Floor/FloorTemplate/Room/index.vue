@@ -1,6 +1,7 @@
 <template>
   <div :style="cssVars">
-    <div class="room" :style="{ height: heights, width: widths }">
+    <slot></slot>
+    <div class="room" :style="{ height: heights, width: widths }" @click="$emit('optionSmokeStatus')">
       {{ roomNumber }}
     </div>
   </div>

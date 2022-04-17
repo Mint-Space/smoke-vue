@@ -18,7 +18,9 @@ import {
     TableColumn,
     Breadcrumb,
     BreadcrumbItem,
-    Tag
+    Tag,
+    Dialog,
+    MessageBox
 } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
@@ -41,4 +43,5 @@ Vue.use(TableColumn)
 Vue.use(Breadcrumb)
 Vue.use(BreadcrumbItem)
 Vue.use(Tag)
-
+Vue.use(Dialog)
+Vue.prototype.$confirm=MessageBox.confirm;

@@ -17,24 +17,33 @@
             :room="room"
             :heights="roomHeights"
             :widths="roomWidths"
+            @optionSmokeStatus="optionSmokeStatus(buildName, floorName, room)"
           ></c-room>
         </div>
         <div class="corridor-box">
-          <c-room
-            v-for="staircase in staircases"
-            :key="staircase.id"
-            :room="staircase"
-            :heights="heights"
-            :widths="widths"
-          ></c-room>
-          <div class="corridors">
+          <div class="staircases">
             <c-room
-              v-for="corridor in corridors"
-              :key="corridor.id"
-              :room="corridor"
+              v-for="staircase in staircases"
+              :key="staircase.id"
+              :room="staircase"
               :heights="heights"
               :widths="widths"
+              @optionSmokeStatus="
+                optionSmokeStatus(buildName, floorName, staircase)
+              "
             ></c-room>
+            <div class="corridors">
+              <c-room
+                v-for="corridor in corridors"
+                :key="corridor.id"
+                :room="corridor"
+                :heights="heights"
+                :widths="widths"
+                @optionSmokeStatus="
+                  optionSmokeStatus(buildName, floorName, corridor)
+                "
+              ></c-room>
+            </div>
           </div>
         </div>
         <div class="even">
@@ -44,10 +53,25 @@
             :room="room"
             :heights="roomHeights"
             :widths="roomWidths"
+            @optionSmokeStatus="optionSmokeStatus(buildName, floorName, room)"
           ></c-room>
         </div>
       </div>
     </div>
+    <el-dialog
+      title="烟雾报警器 | 火灾手动报警按钮 现在运行状态"
+      :visible.sync="dialogVisible"
+      width="35%"
+      :before-close="handleClose"
+    >
+      <span>{{ dialogTitle }}</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -79,6 +103,8 @@ export default {
       roomSingular: [],
       staircases: [],
       corridors: [],
+      dialogVisible: false,
+      dialogTitle: "",
     };
   },
   methods: {
@@ -99,6 +125,34 @@ export default {
         }
       });
       return result;
+    },
+    optionSmokeStatus(buildName, floorName, room) {
+      const info = "请即时查看";
+      if (room.smokeStatus > 0) {
+        this.dialogVisible = true;
+        if (room.smokeStatus == 1) {
+          this.dialogTitle =
+            buildName + floorName + room.room + "位置离线" + info;
+        } else if (room.smokeStatus == 2) {
+          this.dialogTitle =
+            buildName + floorName + room.room + "位置亏电" + info;
+        } else if (room.smokeStatus == 3) {
+          this.dialogTitle =
+            buildName + floorName + room.room + "位置火警" + info;
+        } else {
+          this.dialogTitle =
+            buildName + floorName + room.room + "位置设备异常" + info;
+        }
+      }
+    },
+    handleClose(done) {
+      this.$confirm("确认关闭？")
+        // eslint-disable-next-line
+        .then((_) => {
+          done();
+        })
+        // eslint-disable-next-line
+        .catch((_) => {});
     },
     dateFormat(fmt, date) {
       let ret;
@@ -360,15 +414,23 @@ export default {
     padding-top: 25px;
     padding-bottom: 25px;
     width: 100%;
-    position: relative;
-    .corridors {
-      position: absolute;
+    .staircases {
+      position: relative;
       width: 100%;
       height: 100%;
       display: flex;
       flex-flow: row;
-      justify-content: space-around;
+      justify-content: space-between;
       align-items: center;
+      .corridors {
+        position: absolute;
+        left: 10%;
+        width: 80%;
+        display: flex;
+        flex-flow: row;
+        justify-content: space-around;
+        align-items: center;
+      }
     }
   }
 }

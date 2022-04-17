@@ -1,64 +1,88 @@
 <template>
-  <el-table :data="buildData" border style="width: 100%" height="100%">
-    <!-- <div v-for="(room, index) in buildingData[1].rooms" :key="index"> -->
-    <el-table-column align="center" type="index" width="50"> </el-table-column>
-    <el-table-column align="center" prop="build" label="建筑名称" width="auto">
-    </el-table-column>
-    <el-table-column
-      align="center"
-      prop="time"
-      label="设备联网时间"
-      width="auto"
-    >
-    </el-table-column>
-    <el-table-column
-      align="center"
-      prop="floor"
-      label="烟感手报楼层"
-      width="auto"
-    >
-    </el-table-column>
-    <el-table-column
-      align="center"
-      prop="deviceTypeTitle"
-      label="设备类型"
-      width="auto"
-    >
-    </el-table-column>
-    <el-table-column
-      align="center"
-      prop="room"
-      label="烟感手报位置"
-      width="auto"
-    >
-    </el-table-column>
-    <el-table-column align="center">
-      <template slot="header" slot-scope="scope">
-        <div class="search">
-          <el-input
-            v-model="search"
-            size="mini"
-            placeholder="输入关键字搜索"
-            suffix-icon="el-icon-search"
-            @keyup.native.enter="searchKey(scope.$index, scope.column)"
-          >
-            <el-button
+  <div class="table-box">
+    <el-table :data="buildData" border style="width: 100%" height="100%">
+      <el-table-column align="center" type="index" width="50">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="build"
+        label="建筑名称"
+        width="auto"
+      >
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="floor"
+        label="烟感手报楼层"
+        width="auto"
+      >
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="room"
+        label="烟感手报位置"
+        width="auto"
+      >
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="time"
+        label="设备联网时间"
+        width="auto"
+      >
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="deviceTypeTitle"
+        label="设备类型"
+        width="auto"
+      >
+      </el-table-column>
+      <el-table-column align="center">
+        <template slot="header" slot-scope="scope">
+          <div class="search">
+            <el-input
+              v-model="search"
               size="mini"
-              slot="append"
-              @click="searchKey(scope.$index, scope.column)"
-              >搜索</el-button
+              placeholder="输入关键字搜索"
+              suffix-icon="el-icon-search"
+              @keyup.native.enter="searchKey(scope.$index, scope.column)"
             >
-          </el-input>
-        </div>
-      </template>
-      <template slot-scope="scope">
-        <el-tag :type="smokeStatusValue(scope.$index)" :style="cssVars">{{
-          smokeStatusTitle(scope.$index)
-        }}</el-tag>
-      </template>
-    </el-table-column>
-    <!-- </div> -->
-  </el-table>
+              <el-button
+                size="mini"
+                slot="append"
+                @click="searchKey(scope.$index, scope.column)"
+                >搜索</el-button
+              >
+            </el-input>
+          </div>
+        </template>
+        <template slot-scope="scope">
+          <el-tag
+            :type="smokeStatusValue(scope.$index)"
+            :style="cssVars"
+            @click="optionSmokeStatus(scope.row)"
+          >
+            {{ smokeStatusTitle(scope.$index) }}
+          </el-tag>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-dialog
+      title="烟雾报警器 | 火灾手动报警按钮 现在运行状态"
+      :visible.sync="dialogVisible"
+      width="35%"
+      :before-close="handleClose"
+    >
+      <span>{{ dialogTitle }}</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
@@ -70,6 +94,8 @@ export default {
       search: "",
       buildData: [],
       animationPlay: "paused",
+      dialogVisible: false,
+      dialogTitle: "",
     };
   },
   methods: {
@@ -165,6 +191,34 @@ export default {
       return (this.animationPlay = this.alarm(
         this.buildData[index].smokeStatus
       ));
+    },
+    optionSmokeStatus(row) {
+      const info = "请即时查看";
+      if (row.smokeStatus > 0) {
+        this.dialogVisible = true;
+        if (row.smokeStatus == 1) {
+          this.dialogTitle =
+            row.build + row.floor + row.room + "位置亏电" + info;
+        } else if (row.smokeStatus == 2) {
+          this.dialogTitle =
+            row.build + row.floor + row.room + "位置离线" + info;
+        } else if (row.smokeStatus == 3) {
+          this.dialogTitle =
+            row.build + row.floor + row.room + "位置火警" + info;
+        } else {
+          this.dialogTitle =
+            row.build + row.floor + row.room + "位置设备异常" + info;
+        }
+      }
+    },
+    handleClose(done) {
+      this.$confirm("确认关闭？")
+        // eslint-disable-next-line
+        .then((_) => {
+          done();
+        })
+        // eslint-disable-next-line
+        .catch((_) => {});
     },
     searchKey(index, row) {
       this.tables;
@@ -355,6 +409,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.table-box {
+  width: 100%;
+  height: 100%;
+}
 .el-table {
   height: 100%;
 }
@@ -370,7 +428,8 @@ export default {
   animation-duration: 1s;
   animation-iteration-count: infinite;
 }
-
+.dialog-footer {
+}
 @keyframes blink {
   0% {
     opacity: 100;
