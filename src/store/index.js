@@ -13,7 +13,7 @@ const buildingStore = {
           {
             build: '友谊楼',
             floorName: "1F",
-            smokeStatus: [3, 2, 1],
+            smokeStatus: [4,3, 2, 1],
             staircase: [
               {
                 id: 121,
@@ -127,7 +127,7 @@ const buildingStore = {
               {
                 id: 111,
                 room: 111,
-                smokeStatus: 0,
+                smokeStatus: 4,
                 time: "2022-4-2",
                 deviceType:0
               },
@@ -213,7 +213,7 @@ const buildingStore = {
               {
                 id: 121,
                 room: '走廊1',
-                smokeStatus: 0,
+                smokeStatus: 4,
                 time: "2022-4-2",
                 deviceType:0
               },

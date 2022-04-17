@@ -67,6 +67,10 @@
       <span>{{ dialogTitle }}</span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="warning" @click="dialogVisible = false"
+          >复位</el-button
+        >
+        <el-button type="danger" @click="dialogVisible = false" v-show="isShowAlarm">消音</el-button>
         <el-button type="primary" @click="dialogVisible = false"
           >确 定</el-button
         >
@@ -105,6 +109,7 @@ export default {
       corridors: [],
       dialogVisible: false,
       dialogTitle: "",
+      isShowAlarm: false
     };
   },
   methods: {
@@ -133,15 +138,23 @@ export default {
         if (room.smokeStatus == 1) {
           this.dialogTitle =
             buildName + floorName + room.room + "位置离线" + info;
+            this.isShowAlarm = false
         } else if (room.smokeStatus == 2) {
           this.dialogTitle =
             buildName + floorName + room.room + "位置亏电" + info;
+            this.isShowAlarm = false
         } else if (room.smokeStatus == 3) {
           this.dialogTitle =
+            buildName + floorName + room.room + "位置拆除" + info;
+            this.isShowAlarm = false
+        } else if (room.smokeStatus == 4) {
+          this.dialogTitle =
             buildName + floorName + room.room + "位置火警" + info;
-        } else {
+            this.isShowAlarm = true
+        }else {
           this.dialogTitle =
             buildName + floorName + room.room + "位置设备异常" + info;
+            this.isShowAlarm = false
         }
       }
     },
@@ -371,6 +384,7 @@ export default {
       justify-content: flex-start;
       align-items: center;
       margin-left: 0;
+      color: rgb(85, 134, 199);
     }
     .name {
       display: flex;
@@ -378,6 +392,7 @@ export default {
       justify-content: center;
       align-items: center;
       margin: 5px 10px;
+      color: rgb(85, 134, 199);
       h2 {
         display: flex;
         flex-flow: row;
@@ -392,6 +407,7 @@ export default {
       justify-content: flex-end;
       align-items: center;
       margin-right: 0;
+      color: rgb(85, 134, 199);
     }
   }
 }

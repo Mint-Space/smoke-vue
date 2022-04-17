@@ -51,6 +51,9 @@ export default {
         this.color = "rgb(221, 198, 65)";
       } else if (this.alarmStatus === 3) {
         this.animationPlay = "running";
+        this.color = "rgb(111, 144, 216)";
+      } else if (this.alarmStatus === 4) {
+        this.animationPlay = "running";
         this.color = "rgb(209, 56, 56)";
       } else {
         this.color = "rgb(218, 218, 218)";

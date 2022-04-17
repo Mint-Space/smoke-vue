@@ -62,6 +62,7 @@
             :type="smokeStatusValue(scope.$index)"
             :style="cssVars"
             @click="optionSmokeStatus(scope.row)"
+            effect="dark"
           >
             {{ smokeStatusTitle(scope.$index) }}
           </el-tag>
@@ -77,6 +78,15 @@
       <span>{{ dialogTitle }}</span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="warning" @click="dialogVisible = false"
+          >复位</el-button
+        >
+        <el-button
+          type="danger"
+          @click="dialogVisible = false"
+          v-show="isShowAlarm"
+          >消音</el-button
+        >
         <el-button type="primary" @click="dialogVisible = false"
           >确 定</el-button
         >
@@ -96,26 +106,32 @@ export default {
       animationPlay: "paused",
       dialogVisible: false,
       dialogTitle: "",
+      isShowAlarm: false,
     };
   },
   methods: {
     sortChange(dataArr) {
       const status = [];
       const alarmStatus = [];
+      const dismantleStatus = [];
       const normalStatus = [];
       const offLineStatus = [];
       const underVoltageStatus = [];
       const errorStatus = [];
       for (let index = 0; index < dataArr.length; index++) {
         const arr = dataArr[index];
-        if (arr.smokeStatus >= 0) {
-          if (arr.smokeStatus >= 1) {
-            if (arr.smokeStatus === 3) {
-              alarmStatus.unshift(arr);
-            } else {
+        if (arr.smokeStatus > 0) {
+          if (arr.smokeStatus > 1) {
+            if (arr.smokeStatus > 2) {
+              if (arr.smokeStatus > 3) {
+                alarmStatus.unshift(arr);
+              } else if (arr.smokeStatus === 3) {
+                dismantleStatus.unshift(arr);
+              }
+            } else if (arr.smokeStatus === 2) {
               offLineStatus.unshift(arr);
             }
-          } else {
+          } else if (arr.smokeStatus === 1) {
             underVoltageStatus.push(arr);
           }
         } else if (arr.smokeStatus === 0) {
@@ -128,6 +144,9 @@ export default {
         status.push(value);
       });
       alarmStatus.forEach((value) => {
+        status.push(value);
+      });
+      dismantleStatus.forEach((value) => {
         status.push(value);
       });
       offLineStatus.forEach((value) => {
@@ -149,6 +168,8 @@ export default {
       } else if (smokeStatus === 2) {
         return "warning";
       } else if (smokeStatus === 3) {
+        return "";
+      } else if (smokeStatus === 4) {
         return "danger";
       } else {
         return "";
@@ -165,6 +186,8 @@ export default {
       } else if (smokeStatus === 2) {
         return "离线";
       } else if (smokeStatus === 3) {
+        return "拆除";
+      } else if (smokeStatus === 4) {
         return "火警";
       } else {
         console.log(smokeStatus);
@@ -183,6 +206,8 @@ export default {
         return "running";
       } else if (smokeStatus === 3) {
         return "running";
+      } else if (smokeStatus === 4) {
+        return "running";
       } else {
         return "paused";
       }
@@ -199,15 +224,23 @@ export default {
         if (row.smokeStatus == 1) {
           this.dialogTitle =
             row.build + row.floor + row.room + "位置亏电" + info;
+          this.isShowAlarm = false;
         } else if (row.smokeStatus == 2) {
           this.dialogTitle =
             row.build + row.floor + row.room + "位置离线" + info;
+          this.isShowAlarm = false;
         } else if (row.smokeStatus == 3) {
           this.dialogTitle =
+            row.build + row.floor + row.room + "位置拆除" + info;
+          this.isShowAlarm = false;
+        } else if (row.smokeStatus == 4) {
+          this.dialogTitle =
             row.build + row.floor + row.room + "位置火警" + info;
+          this.isShowAlarm = true;
         } else {
           this.dialogTitle =
             row.build + row.floor + row.room + "位置设备异常" + info;
+          this.isShowAlarm = false;
         }
       }
     },

@@ -1,6 +1,7 @@
 <template>
   <div class="legend">
     <div class="box alarm">火警</div>
+    <div class="box dismantle">拆除</div>
     <div class="box off-line">离线</div>
     <div class="box under-voltage">亏电</div>
     <div class="box normal">正常</div>
@@ -38,6 +39,9 @@ export default {
   }
   .alarm {
     background-color: rgb(209, 56, 56);
+  }
+  .dismantle{
+    background-color: rgb(111, 144, 216);
   }
   .off-line {
     background-color: rgb(138, 138, 138);

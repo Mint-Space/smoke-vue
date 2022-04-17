@@ -39,8 +39,10 @@ export default {
     alarm() {
       if (this.maxAlarm === 0) {
         this.color = "rgb(55, 172, 107)";
-      } else if (this.maxAlarm === 3) {
+      } else if (this.maxAlarm === 4) {
         this.color = "rgb(209, 56, 56)";
+      } else if (this.maxAlarm === 3) {
+        this.color = "rgb(111, 144, 216)";
       } else if (this.maxAlarm === 2) {
         this.color = "rgb(221, 198, 65)";
       } else if (this.maxAlarm === 1) {

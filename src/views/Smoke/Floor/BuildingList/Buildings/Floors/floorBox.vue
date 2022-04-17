@@ -22,9 +22,12 @@ export default {
       if (this.alarmStatus === 0) {
         this.animationPlay = "paused";
         this.color = "rgb(55, 172, 107)";
-      } else if (this.alarmStatus === 3) {
+      } else if (this.alarmStatus === 4) {
         this.animationPlay = "running";
         this.color = "rgb(209, 56, 56)";
+      }else if (this.alarmStatus === 3) {
+        this.animationPlay = "running";
+        this.color = "rgb(111, 144, 216)";
       } else if (this.alarmStatus === 2) {
         this.animationPlay = "running";
         this.color = "rgb(221, 198, 65)";
