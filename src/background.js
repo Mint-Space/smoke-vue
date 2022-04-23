@@ -7,16 +7,28 @@ const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
+<<<<<<< HEAD
   { scheme: 'app', privileges: { secure: false, standard: true ,bypassCSP: true,stream: true} }
+=======
+  { scheme: 'app', privileges: { secure: true, standard: true } }
+>>>>>>> fcc858b7229b21f9664ba434fb4552daed29c502
 ])
 
 async function createWindow() {
   // Create the browser window.
+<<<<<<< HEAD
 
   const win = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
+=======
+  const win = new BrowserWindow({
+    width: 1080,
+    height: 1280,
+    webPreferences: {
+      
+>>>>>>> fcc858b7229b21f9664ba434fb4552daed29c502
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
@@ -31,7 +43,10 @@ async function createWindow() {
   } else {
     createProtocol('app')
     // Load the index.html when not in development
+<<<<<<< HEAD
     
+=======
+>>>>>>> fcc858b7229b21f9664ba434fb4552daed29c502
     win.loadURL('app://./index.html')
   }
 }
