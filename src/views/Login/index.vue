@@ -29,7 +29,7 @@ export default {
   align-items: center;
   z-index: -1;
   .container {
-    background-image: url("@/assets/city-night.jpg");
+    background-image: url("../../assets/city-night.jpg");
     background-repeat: no-repeat;
     background-origin: padding-box;
     background-size: cover;
