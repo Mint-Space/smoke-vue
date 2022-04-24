@@ -4,11 +4,7 @@
 
 "7zip-bin@~5.1.1":
   version "5.1.1"
-<<<<<<< HEAD
-  resolved "https://registry.yarnpkg.com/7zip-bin/-/7zip-bin-5.1.1.tgz#9274ec7460652f9c632c59addf24efb1684ef876"
-=======
   resolved "https://registry.npmmirror.com/7zip-bin/-/7zip-bin-5.1.1.tgz#9274ec7460652f9c632c59addf24efb1684ef876"
->>>>>>> fcc858b7229b21f9664ba434fb4552daed29c502
   integrity sha512-sAP4LldeWNz0lNzmTird3uWfFDWWTeg6V/MsmyyLR9X1idwKBWIgt/ZvinqQldJm3LecKEs1emkbquO6PCiLVQ==
 
 "@achrinza/node-ipc@9.2.2":
