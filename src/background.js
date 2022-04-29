@@ -7,9 +7,9 @@ const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
-  { scheme: 'app', privileges: { secure: true, standard: true } }
+  { scheme: 'app', privileges: { standard: true } }
 ])
-
+app.allowRendererProcessReuse = true
 async function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
@@ -20,9 +20,20 @@ async function createWindow() {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
-      contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION
+      contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
+      webSecurity: false, //========关闭安全策略===========
     }
   })
+
+  //===========自定义file:///协议的解析=======================
+  protocol.interceptFileProtocol('file', (req, callback) => {
+    const url = req.url.substr(8);
+    callback(decodeURI(url));
+  }, (error) => {
+    if (error) {
+      console.error('Failed to register protocol');
+    }
+  });
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode

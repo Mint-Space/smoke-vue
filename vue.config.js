@@ -1,104 +1,127 @@
 const { defineConfig } = require('@vue/cli-service')
-const path = require('path')
-function resolve(dir) {
-  return path.join(__dirname, dir)
-}
 
-const config = {
-  configureWebpack: {
-    devtool: 'nosources-source-map'
-  },
-  chainWebpack: config => {
-    config.resolve.alias
-      .set('@', resolve('src'))
-      .set('root', resolve('./'))
-    // define
-    // config.plugin('define')
-    //   .tap(args => {
-    //     return args
-    //   })
-  },
-  pluginOptions: {
-    electronBuilder: {
-      nodeIntegration: true, // will remove in the future
-      // customFileProtocol: 'ink://./',
-      externals: ['ink'],
-      chainWebpackMainProcess: config => {
-        config.resolve.alias
-          .set('@', resolve('src'))
-          .set('root', resolve('./'))
-      },
-      builderOptions: {
-        productName: 'Smoke',
-        appId: 'ink.sake.smoke',
-        
-        dmg: {
-          contents: [
-            {
-              x: 410,
-              y: 150,
-              type: 'link',
-              path: '/Applications'
-            },
-            {
-              x: 130,
-              y: 150,
-              type: 'file'
-            }
-          ]
-        },
-        mac: {
-          icon: 'public/icon.icns',
-          extendInfo: {
-            LSUIElement: 1
-          },
-          target: [{
-            target: 'dmg',
-            arch: [
-              'x64',
-              'arm64'
-            ]
-          }],
-          // eslint-disable-next-line no-template-curly-in-string
-          artifactName: '${productName}-${version}-${arch}.dmg'
-        },
-        win: {
-          icon: 'public/icon.ico',
-          // eslint-disable-next-line no-template-curly-in-string
-          artifactName: '${productName}-${version}-${arch}.exe',
-          target: [{
-            target: 'nsis',
-            arch: [
-              'x64',
-              'ia32'
-            ]
-          }]
-        },
-        nsis: {
-          shortcutName: 'ink',
-          oneClick: false,
-          allowToChangeInstallationDirectory: true
-        },
-        linux: {
-          // icon: 'public/'
-        },
-        
-      }
-    }
-  }
-}
+const path = require("path")
+const CompressionWebpackPlugin = require("compression-webpack-plugin")
+const productionGzipExtensions = ["js", "css"]
 
-if (process.env.NODE_ENV === 'development') {
-  config.configureWebpack = {
-    devtool: 'source-map'
-  }
-  // for dev main process hot reload
-  config.pluginOptions.electronBuilder.mainProcessWatch = ['src/main/**/*']
-}
+const resolve = (dir) => path.join(__dirname, dir)
 
 module.exports = defineConfig({
-  ...config,
   transpileDependencies: true,
-  // publicPath: '/',
-  // assetsDir: 'assets'
+  // 基本路径
+  publicPath: process.env.NODE_ENV === 'production' ? './' : '/',
+  // 输出文件目录
+  outputDir: "./dist",
+  assetsDir: "./static",
+  // eslint-loader 是否在保存的时候检查
+  lintOnSave: false,
+  runtimeCompiler: true, // 关键点在这
+  filenameHashing: true,
+  // 调整内部的 webpack 配置。
+  chainWebpack: (config) => {
+    config.resolve.alias
+      .set("@", resolve("./src"))
+      .set("assets", resolve("./src/assets"))
+      .set("components", resolve("./src/components"))
+    config.module
+      .rule("vue")
+      .use("vue-loader")
+      .tap((options) => ({
+        ...options,
+        compilerOptions: {
+          // 忽略自定义标签警告 vue3 app.config.compilerOptions.isCustomElement 配置有问题
+          isCustomElement: (tag) => {
+            return ["xml", "block", "mutation", "category"].includes(tag)
+          },
+        },
+      }))
+  },
+  // 生产环境是否生成 sourceMap 文件
+  productionSourceMap: false,
+  // css相关配置
+  css: {
+    // 开启 CSS source maps?
+    sourceMap: false,
+    // css预设器配置项
+    loaderOptions: {
+      // less: {
+      //   additionalData: `@import './src/assets/styles/variables.scss';`,
+      // },
+      less: {
+        implementation: require("less"), // This line must in sass option
+      },
+      css: {
+        modules: {
+          auto: () => false,
+        },
+      },
+    },
+  },
+  // webpack-dev-server 相关配置
+  // devServer: {
+  //   /* 自动打开浏览器 */
+  //   open: process.platform === "darwin",
+  //   port: 8080,
+  //   https: false,
+  //   // hot: 'only',
+  //   /* 使用代理 */
+  //   proxy: {
+  //     "/robogo": {
+  //       /* 目标代理服务器地址 */
+  //       target: process.env.VUE_APP_BASE_API,
+  //       /* 允许跨域 */
+  //       changeOrigin: true,
+  //       ws: true,
+  //     },
+  //     "/loki": {
+  //       /* 目标代理服务器地址 */
+  //       target: process.env.VUE_APP_BASE_API,
+  //       /* 允许跨域 */
+  //       changeOrigin: true,
+  //       ws: true,
+  //     },
+  //   },
+  // },
+  configureWebpack: {
+    resolve: {
+      fallback: {
+        path: require.resolve("path-browserify"),
+        stream: require.resolve("readable-stream"),
+        crypto: require.resolve("crypto-browserify"),
+        perf_hooks: false,
+        module: false,
+        "@blueprintjs/core": false,
+        "@blueprintjs/icons": false,
+        domain: false,
+        fs: false,
+        pnpapi: false,
+        punycode: false,
+      },
+    },
+    module: {
+      rules: [
+        {
+          test: /\.mjs$/,
+          include: /node_modules/,
+          type: "javascript/auto",
+        },
+      ],
+    },
+    plugins: [
+      new CompressionWebpackPlugin({
+        filename: "[path][base].gzip", 
+        algorithm: "gzip",
+        test: new RegExp("\\.(" + productionGzipExtensions.join("|") + ")$"),
+        threshold: 10240, //内容超过10KB进行压缩
+        minRatio: 0.8,
+      }),
+    ],
+    externals: [
+      {
+        "./cptable": "var cptable",
+      },
+    ],
+  },
+  // 第三方插件配置
+  pluginOptions: {},
 })
