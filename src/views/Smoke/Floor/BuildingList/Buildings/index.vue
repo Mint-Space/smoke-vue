@@ -47,15 +47,21 @@ export default {
       return this.$store.state.buildingStore.build;
     },
     setBuild(buildName, floorIndex) {
-      this.count++;
       const buildConfig = {
         buildName,
         floorIndex,
       };
       this.getBuild(buildConfig);
-      this.$router.push({
-        name: "floor",
-      });
+      console.log(this.$route);
+      if (this.$route.name == "building") {
+        this.$router.push({
+          name: "floor",
+        });
+      } else if (this.$route.name == "table") {
+        this.$router.push({
+          name: "table",
+        });
+      }
     },
   },
 
