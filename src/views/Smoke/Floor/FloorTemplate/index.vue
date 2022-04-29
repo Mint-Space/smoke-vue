@@ -77,7 +77,7 @@
           >消音</el-button
         >
         <el-button type="primary" @click="dialogVisible = false"
-          >确 定</el-button
+          >屏蔽</el-button
         >
       </span>
     </el-dialog>
