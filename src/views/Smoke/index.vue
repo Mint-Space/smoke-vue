@@ -77,8 +77,7 @@ export default {
     this.isShowButton();
   },
   destroyed() {
-    this.removeBuildDataToStorage();
-    clearInterval(this.timer);
+    // this.removeBuildDataToStorage();
   },
 };
 </script>

@@ -1,101 +1,101 @@
 <template>
   <div class="table-box">
-    <div class="scrollbar-table">
-      <el-scrollbar style="height: 100%">
-        <el-table :data="buildData" border style="width: 100%" height="100%">
-          <el-table-column align="center" type="index" width="50">
-          </el-table-column>
-          <el-table-column
-            align="center"
-            prop="build"
-            label="建筑名称"
-            width="auto"
-          >
-          </el-table-column>
-          <el-table-column
-            align="center"
-            prop="floor"
-            label="烟感手报楼层"
-            width="auto"
-          >
-          </el-table-column>
-          <el-table-column
-            align="center"
-            prop="room"
-            label="烟感手报位置"
-            width="auto"
-          >
-          </el-table-column>
-          <el-table-column
-            align="center"
-            prop="time"
-            label="设备联网时间"
-            width="auto"
-          >
-          </el-table-column>
-          <el-table-column
-            align="center"
-            prop="deviceTypeTitle"
-            label="设备类型"
-            width="auto"
-          >
-          </el-table-column>
-          <el-table-column align="center">
-            <template slot="header" slot-scope="scope">
-              <div class="search">
-                <el-input
-                  v-model="search"
-                  size="mini"
-                  placeholder="输入关键字搜索"
-                  suffix-icon="el-icon-search"
-                  @keyup.native.enter="searchKey(scope.$index, scope.column)"
-                >
-                  <el-button
-                    size="mini"
-                    slot="append"
-                    @click="searchKey(scope.$index, scope.column)"
-                    >搜索</el-button
-                  >
-                </el-input>
-              </div>
-            </template>
-            <template slot-scope="scope">
-              <el-tag
-                :type="smokeStatusValue(scope.$index)"
-                :style="cssVars"
-                @click="optionSmokeStatus(scope.row)"
-                effect="dark"
+    <!-- <div class="scrollbar-table"> -->
+    <!-- <el-scrollbar style="height: 100%"> -->
+    <el-table :data="buildData" border style="width: 100%" height="100%">
+      <el-table-column align="center" type="index" width="50">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="build"
+        label="建筑名称"
+        width="auto"
+      >
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="floor"
+        label="烟感手报楼层"
+        width="auto"
+      >
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="room"
+        label="烟感手报位置"
+        width="auto"
+      >
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="time"
+        label="设备联网时间"
+        width="auto"
+      >
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="deviceTypeTitle"
+        label="设备类型"
+        width="auto"
+      >
+      </el-table-column>
+      <el-table-column align="center">
+        <template slot="header" slot-scope="scope">
+          <div class="search">
+            <el-input
+              v-model="search"
+              size="mini"
+              placeholder="输入关键字搜索"
+              suffix-icon="el-icon-search"
+              @keyup.native.enter="searchKey(scope.$index, scope.column)"
+            >
+              <el-button
+                size="mini"
+                slot="append"
+                @click="searchKey(scope.$index, scope.column)"
+                >搜索</el-button
               >
-                {{ smokeStatusTitle(scope.$index) }}
-              </el-tag>
-            </template>
-          </el-table-column>
-        </el-table>
-        <el-dialog
-          title="烟雾报警器 | 火灾手动报警按钮 现在运行状态"
-          :visible.sync="dialogVisible"
-          width="35%"
-          :before-close="handleClose"
+            </el-input>
+          </div>
+        </template>
+        <template slot-scope="scope">
+          <el-tag
+            :type="smokeStatusValue(scope.$index)"
+            :style="cssVars"
+            @click="optionSmokeStatus(scope.row)"
+            effect="dark"
+          >
+            {{ smokeStatusTitle(scope.$index) }}
+          </el-tag>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-dialog
+      title="烟雾报警器 | 火灾手动报警按钮 现在运行状态"
+      :visible.sync="dialogVisible"
+      width="35%"
+      :before-close="handleClose"
+    >
+      <span>{{ dialogTitle }}</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="warning" @click="dialogVisible = false"
+          >复位</el-button
         >
-          <span>{{ dialogTitle }}</span>
-          <span slot="footer" class="dialog-footer">
-            <el-button @click="dialogVisible = false">取 消</el-button>
-            <el-button type="warning" @click="dialogVisible = false"
-              >复位</el-button
-            >
-            <el-button
-              type="danger"
-              @click="dialogVisible = false"
-              v-show="isShowAlarm"
-              >消音</el-button
-            >
-            <el-button type="primary" @click="dialogVisible = false"
-              >屏蔽</el-button
-            >
-          </span>
-        </el-dialog>
-      </el-scrollbar>
-    </div>
+        <el-button
+          type="danger"
+          @click="dialogVisible = false"
+          v-show="isShowAlarm"
+          >消音</el-button
+        >
+        <el-button type="primary" @click="dialogVisible = false"
+          >屏蔽</el-button
+        >
+      </span>
+    </el-dialog>
+    <!-- </el-scrollbar> -->
+    <!-- </div> -->
   </div>
 </template>
 
@@ -309,31 +309,114 @@ export default {
       });
       return result;
     },
+    packBuildingData(building) {
+      const result = [];
+      const build = building.build;
+      const floor = building.floorName;
+      const rooms = building.rooms;
+      const staircase = building.staircase;
+      const corridor = building.corridor;
+      for (let index = 0; index < rooms.length; index++) {
+        result.push(
+          Object.assign(
+            { build: build },
+            { floor: floor },
+            { room: rooms[index].room },
+            { time: rooms[index].time },
+            { smokeStatus: parseInt(rooms[index].smokeStatus) },
+            { deviceType: parseInt(rooms[index].deviceType) }
+          )
+        );
+      }
+      for (let index = 0; index < staircase.length; index++) {
+        result.push(
+          Object.assign(
+            { build: build },
+            { floor: floor },
+            { room: staircase[index].room },
+            { time: staircase[index].time },
+            { smokeStatus: parseInt(staircase[index].smokeStatus) },
+            { deviceType: parseInt(staircase[index].deviceType) }
+          )
+        );
+      }
+      for (let index = 0; index < corridor.length; index++) {
+        result.push(
+          Object.assign(
+            { build: build },
+            { floor: floor },
+            { room: corridor[index].room },
+            { time: corridor[index].time },
+            { smokeStatus: parseInt(corridor[index].smokeStatus) },
+            { deviceType: parseInt(corridor[index].deviceType) }
+          )
+        );
+      }
+      return result;
+    },
     saveBuildDataToStorage() {
-      const buildList = this.buildData;
-      const build = [];
-      const floor = [];
-      const rooms = [];
+      const buildList = this.build;
+      const build = buildList.build;
+      const floor = buildList.floorName;
+      const rooms = buildList.rooms;
+      const staircase = buildList.staircase;
+      const corridor = buildList.corridor;
+      const buildName = [];
+      const floorName = [];
+      const roomsName = [];
       const times = [];
       const smokeStatus = [];
+      const staircaseName = [];
+      const staircaseTimes = [];
+      const staircaseSmokeStatus = [];
+      const corridorName = [];
+      const corridorTimes = [];
+      const corridorSmokeStatus = [];
       const deviceType = [];
-      buildList.forEach((value) => {
-        build.push(value.build);
-        floor.push(value.floor);
-        rooms.push(value.room);
+      const staircaseDeviceType = [];
+      const corridorDeviceType = [];
+      rooms.forEach((value) => {
+        buildName.push(build);
+        floorName.push(floor);
+        roomsName.push(value.room);
         times.push(value.time);
         smokeStatus.push(value.smokeStatus);
         deviceType.push(value.deviceType);
       });
-      window.localStorage.setItem("build", build);
-      window.localStorage.setItem("floor", floor);
-      window.localStorage.setItem("rooms", rooms);
+      staircase.forEach((value) => {
+        staircaseName.push(value.room);
+        staircaseTimes.push(value.time);
+        staircaseSmokeStatus.push(value.smokeStatus);
+        staircaseDeviceType.push(value.deviceType);
+      });
+      corridor.forEach((value) => {
+        corridorName.push(value.room);
+        corridorTimes.push(value.time);
+        corridorSmokeStatus.push(value.smokeStatus);
+        corridorDeviceType.push(value.deviceType);
+      });
+
+      this.buildName = build;
+      this.floorName = floor;
+      this.staircases = staircase;
+      this.corridors = corridor;
+      window.localStorage.setItem("build", buildName);
+      window.localStorage.setItem("floor", floorName);
+      window.localStorage.setItem("rooms", roomsName);
       window.localStorage.setItem("times", times);
       window.localStorage.setItem("smokeStatus", smokeStatus);
+      window.localStorage.setItem("staircaseName", staircaseName);
+      window.localStorage.setItem("staircaseTimes", staircaseTimes);
+      window.localStorage.setItem("staircaseSmokeStatus", staircaseSmokeStatus);
+      window.localStorage.setItem("corridorName", corridorName);
+      window.localStorage.setItem("corridorTimes", corridorTimes);
+      window.localStorage.setItem("corridorSmokeStatus", corridorSmokeStatus);
       window.localStorage.setItem("deviceType", deviceType);
+      window.localStorage.setItem("staircaseDeviceType", staircaseDeviceType);
+      window.localStorage.setItem("corridorDeviceType", corridorDeviceType);
     },
     getBuildDataFromStorage() {
-      this.buildData = [];
+      const result = [];
       const build = window.localStorage.getItem("build").split(",");
       const floor = window.localStorage.getItem("floor").split(",");
       const rooms = window.localStorage.getItem("rooms").split(",");
@@ -365,7 +448,7 @@ export default {
         .getItem("corridorSmokeStatus")
         .split(",");
       for (let index = 0; index < rooms.length; index++) {
-        this.buildData.push(
+        result.push(
           Object.assign(
             { build: build[index] },
             { floor: floor[index] },
@@ -377,7 +460,7 @@ export default {
         );
       }
       for (let index = 0; index < staircaseName.length; index++) {
-        this.buildData.push(
+        result.push(
           Object.assign(
             { build: build[index] },
             { floor: floor[index] },
@@ -389,7 +472,7 @@ export default {
         );
       }
       for (let index = 0; index < corridorName.length; index++) {
-        this.buildData.push(
+        result.push(
           Object.assign(
             { build: build[index] },
             { floor: floor[index] },
@@ -399,6 +482,24 @@ export default {
             { deviceType: parseInt(corridorDeviceType[index]) }
           )
         );
+      }
+      return result;
+    },
+    saveAndGet() {
+      const build = window.localStorage.getItem("build");
+      if ((build === "undefined") | (build === "") | (build === null)) {
+        this.buildData = this.packBuildingData(this.build);
+        this.buildData = this.showSmokeAndManualAlarmButtonTitle(
+          this.buildData
+        );
+        this.buildData = this.sortChange(this.buildData);
+        this.saveBuildDataToStorage();
+      } else {
+        this.buildData = this.getBuildDataFromStorage();
+        this.buildData = this.showSmokeAndManualAlarmButtonTitle(
+          this.buildData
+        );
+        this.buildData = this.sortChange(this.buildData);
       }
     },
     handleEdit(index, row) {
@@ -427,26 +528,16 @@ export default {
       return this.buildData;
     },
   },
-
-  created() {
-    const build = window.localStorage.getItem("build");
-    const floor = window.localStorage.getItem("floor");
-    if ((build === "undefined") | (build === "") | (build === null)) {
-      this.buildData = this.showSmokeAndManualAlarmButtonTitle(this.buildData);
-      this.buildData = this.sortChange(this.packBuild(this.build));
+  watch: {
+    build(newBuild) {
       this.saveBuildDataToStorage();
-    } else if ((this.build.build != build) | (this.build.floorName != floor)) {
-      window.localStorage.clear();
-      console.log(this);
-      this.buildData = this.packBuild(this.build);
-      this.buildData = this.showSmokeAndManualAlarmButtonTitle(this.buildData);
-      this.buildData = this.sortChange(this.packBuild(this.build));
-      this.saveBuildDataToStorage();
-    } else {
-      this.getBuildDataFromStorage();
+      this.buildData = this.getBuildDataFromStorage();
       this.buildData = this.showSmokeAndManualAlarmButtonTitle(this.buildData);
       this.buildData = this.sortChange(this.buildData);
-    }
+    },
+  },
+  created() {
+    this.saveAndGet();
   },
   mounted() {},
   updated() {},

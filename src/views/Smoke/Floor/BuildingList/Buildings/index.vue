@@ -52,7 +52,6 @@ export default {
         floorIndex,
       };
       this.getBuild(buildConfig);
-      console.log(this.$route);
       if (this.$route.name == "building") {
         this.$router.push({
           name: "floor",

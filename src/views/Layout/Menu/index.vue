@@ -46,7 +46,7 @@ export default {
     showHome() {
     },
     showSmoke() {
-      window.localStorage.clear()
+      // window.localStorage.clear()
     },
   },
 };

@@ -236,6 +236,10 @@ export default {
         corridorSmokeStatus.push(value.smokeStatus);
         corridorDeviceType.push(value.deviceType);
       });
+      this.buildName = build;
+      this.floorName = floor;
+      this.roomEven = this.getRoomEven(rooms);
+      this.roomSingular = this.getRoomSingular(rooms);
       this.staircases = staircase;
       this.corridors = corridor;
       window.localStorage.setItem("build", buildName);
@@ -254,6 +258,9 @@ export default {
       window.localStorage.setItem("corridorDeviceType", corridorDeviceType);
     },
     getBuildDataFromStorage() {
+      const roomsNameResult = [];
+      const staircaseNameResult = [];
+      const corridorNameResult = [];
       const build = window.localStorage.getItem("build").split(",");
       const floor = window.localStorage.getItem("floor").split(",");
       const rooms = window.localStorage.getItem("rooms").split(",");
@@ -285,11 +292,11 @@ export default {
         .getItem("corridorSmokeStatus")
         .split(",");
       for (let index = 0; index < rooms.length; index++) {
-        this.buildData.push(
+        roomsNameResult.push(
           Object.assign(
             { build: build[index] },
             { floor: floor[index] },
-            { room: parseInt(rooms[index]) },
+            { room: rooms[index] },
             { time: times[index] },
             { smokeStatus: parseInt(smokeStatus[index]) },
             { deviceType: parseInt(deviceType[index]) }
@@ -297,7 +304,7 @@ export default {
         );
       }
       for (let index = 0; index < staircaseName.length; index++) {
-        this.staircases.push(
+        staircaseNameResult.push(
           Object.assign(
             { build: build[index] },
             { floor: floor[index] },
@@ -309,7 +316,7 @@ export default {
         );
       }
       for (let index = 0; index < corridorName.length; index++) {
-        this.corridors.push(
+        corridorNameResult.push(
           Object.assign(
             { build: build[index] },
             { floor: floor[index] },
@@ -320,6 +327,20 @@ export default {
           )
         );
       }
+      this.roomEven = this.getRoomEven(roomsNameResult);
+      this.roomSingular = this.getRoomSingular(roomsNameResult);
+      this.staircases = staircaseNameResult;
+      this.corridors = corridorNameResult;
+      this.buildName = build[0];
+      this.floorName = floor[0];
+    },
+    saveAndGet() {
+      const build = window.localStorage.getItem("build");
+      if ((build === "undefined") | (build === "") | (build === null)) {
+        this.saveBuildDataToStorage();
+      } else {
+        this.getBuildDataFromStorage();
+      }
     },
   },
   computed: {
@@ -327,63 +348,16 @@ export default {
   },
   watch: {
     build(newBuild) {
-      const rooms = newBuild.rooms;
-      this.buildName = newBuild.build;
-      this.floorName = newBuild.floorName;
-      this.roomEven = this.getRoomEven(rooms);
-      this.roomSingular = this.getRoomSingular(rooms);
+      this.saveBuildDataToStorage();
     },
   },
   created() {
-    const build = window.localStorage.getItem("build");
-    const floor = window.localStorage.getItem("floor");
-    if ((build === "undefined") | (build === "") | (build === null)) {
-      this.buildName = this.build.build;
-      this.floorName = this.build.floorName;
-      this.saveBuildDataToStorage();
-      this.roomEven = this.getRoomEven(this.build.rooms);
-      this.roomSingular = this.getRoomSingular(this.build.rooms);
-    } else if ((this.build.build != build) | (this.build.floorName != floor)) {
-      window.localStorage.clear();
-      this.buildName = this.build.build;
-      this.floorName = this.build.floorName;
-      this.saveBuildDataToStorage();
-      this.roomEven = this.getRoomEven(this.build.rooms);
-      this.roomSingular = this.getRoomSingular(this.build.rooms);
-    } else {
-      this.getBuildDataFromStorage();
-      this.buildName = this.buildData[0].build;
-      this.floorName = this.buildData[0].floor;
-      this.roomEven = this.getRoomEven(this.buildData);
-      this.roomSingular = this.getRoomSingular(this.buildData);
-    }
+    this.saveAndGet();
   },
-  updated() {
-    const build = window.localStorage.getItem("build");
-    const floor = window.localStorage.getItem("floor");
-    if (
-      (build === "undefined") |
-      (build === "") |
-      (build === null) |
-      (build != this.build.build)
-    ) {
-      this.buildName = this.build.build;
-      this.floorName = this.build.floorName;
-      this.saveBuildDataToStorage();
-    } else if ((this.build.build != build) | (this.build.floorName != floor)) {
-      window.localStorage.clear();
-      this.buildName = this.build.build;
-      this.floorName = this.build.floorName;
-      this.saveBuildDataToStorage();
-      this.roomEven = this.getRoomEven(this.build.rooms);
-      this.roomSingular = this.getRoomSingular(this.build.rooms);
-    } else {
-      this.buildName = this.buildData[0].build;
-      this.floorName = this.buildData[0].floor;
-      this.getBuildDataFromStorage();
-    }
+  updated() {},
+  destroyed() {
+    window.localStorage.clear()
   },
-  destroyed() {},
 };
 </script>
 
