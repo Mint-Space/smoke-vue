@@ -51,6 +51,11 @@ const routes = [
             name: "list",
             component: () => import('@/views/Smoke/List')
           },
+          {
+            path: 'table',
+            name: "table",
+            component: () => import('@/views/Smoke/Table')
+          },
         ]
       }
     ]

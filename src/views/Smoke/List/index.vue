@@ -430,7 +430,15 @@ export default {
 
   created() {
     const build = window.localStorage.getItem("build");
+    const floor = window.localStorage.getItem("floor");
     if ((build === "undefined") | (build === "") | (build === null)) {
+      this.buildData = this.showSmokeAndManualAlarmButtonTitle(this.buildData);
+      this.buildData = this.sortChange(this.packBuild(this.build));
+      this.saveBuildDataToStorage();
+    } else if ((this.build.build != build) | (this.build.floorName != floor)) {
+      window.localStorage.clear();
+      console.log(this);
+      this.buildData = this.packBuild(this.build);
       this.buildData = this.showSmokeAndManualAlarmButtonTitle(this.buildData);
       this.buildData = this.sortChange(this.packBuild(this.build));
       this.saveBuildDataToStorage();

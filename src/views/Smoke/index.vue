@@ -43,7 +43,7 @@ export default {
         this.isChange = false;
       } else if (
         this.$route.path == "/smokes/floor" ||
-        this.$route.path == "/smokes/list"
+        this.$route.path == "/smokes/table"
       ) {
         this.isChange = true;
       }
@@ -51,9 +51,9 @@ export default {
     changeTable() {
       if (this.$route.path == "/smokes/floor") {
         this.$router.push({
-          name: "list",
+          name: "table",
         });
-      } else if (this.$route.path == "/smokes/list") {
+      } else if (this.$route.path == "/smokes/table") {
         this.$router.push({
           name: "floor",
         });

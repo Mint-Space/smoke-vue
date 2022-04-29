@@ -333,11 +333,18 @@ export default {
       this.roomEven = this.getRoomEven(rooms);
       this.roomSingular = this.getRoomSingular(rooms);
     },
-    
   },
   created() {
     const build = window.localStorage.getItem("build");
+    const floor = window.localStorage.getItem("floor");
     if ((build === "undefined") | (build === "") | (build === null)) {
+      this.buildName = this.build.build;
+      this.floorName = this.build.floorName;
+      this.saveBuildDataToStorage();
+      this.roomEven = this.getRoomEven(this.build.rooms);
+      this.roomSingular = this.getRoomSingular(this.build.rooms);
+    } else if ((this.build.build != build) | (this.build.floorName != floor)) {
+      window.localStorage.clear();
       this.buildName = this.build.build;
       this.floorName = this.build.floorName;
       this.saveBuildDataToStorage();
@@ -353,6 +360,7 @@ export default {
   },
   updated() {
     const build = window.localStorage.getItem("build");
+    const floor = window.localStorage.getItem("floor");
     if (
       (build === "undefined") |
       (build === "") |
@@ -362,6 +370,13 @@ export default {
       this.buildName = this.build.build;
       this.floorName = this.build.floorName;
       this.saveBuildDataToStorage();
+    } else if ((this.build.build != build) | (this.build.floorName != floor)) {
+      window.localStorage.clear();
+      this.buildName = this.build.build;
+      this.floorName = this.build.floorName;
+      this.saveBuildDataToStorage();
+      this.roomEven = this.getRoomEven(this.build.rooms);
+      this.roomSingular = this.getRoomSingular(this.build.rooms);
     } else {
       this.buildName = this.buildData[0].build;
       this.floorName = this.buildData[0].floor;
