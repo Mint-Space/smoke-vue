@@ -98,9 +98,11 @@ export default {
         this.$route.path == "/smokes/table"
       ) {
         this.isChange = true;
-        // if (this.$route.path == "/smokes/table") {
-        //   this.isShowExcel = true;
-        // }
+        if (this.$route.path == "/smokes/table") {
+          this.isShowExcel = true;
+        } else {
+          this.isShowExcel = false;
+        }
       }
     },
     changeTable() {
@@ -133,9 +135,10 @@ export default {
     },
   },
   created() {
-    console.log(this);
     this.isShowButton();
-    this.tableList = this.buildTableList;
+    if (this.buildTableList != null) {
+      this.tableList = this.buildTableList;
+    }
   },
   updated() {
     this.isShowButton();

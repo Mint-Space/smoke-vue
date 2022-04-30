@@ -356,7 +356,7 @@ export default {
   },
   updated() {},
   destroyed() {
-    window.localStorage.clear()
+    // window.localStorage.clear()
   },
 };
 </script>

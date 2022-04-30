@@ -500,6 +500,7 @@ export default {
           this.buildData
         );
         this.buildData = this.sortChange(this.buildData);
+        this.setBuildTableList(this.buildData);
         this.saveBuildDataToStorage();
       } else {
         this.buildData = this.getBuildDataFromStorage();
