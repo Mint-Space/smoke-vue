@@ -66,7 +66,7 @@
             @click="optionSmokeStatus(scope.row)"
             effect="dark"
           >
-            {{ smokeStatusTitle(scope.$index) }}
+            {{ setSmokeStatusTitle(scope.$index) }}
           </el-tag>
         </template>
       </el-table-column>
@@ -100,7 +100,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 export default {
   name: "CList",
   data() {
@@ -114,6 +114,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions("buildingStore", ["setBuildTableList"]),
     sortChange(dataArr) {
       const status = [];
       const alarmStatus = [];
@@ -200,6 +201,13 @@ export default {
     },
     smokeStatusTitle(index) {
       return this.getTagName(this.buildData[index].smokeStatus);
+    },
+    setSmokeStatusTitle(index) {
+      this.buildData[index] = Object.assign({
+        ...this.buildData[index],
+        smokeStatusTitle: this.smokeStatusTitle(index),
+      });
+      return this.buildData[index].smokeStatusTitle;
     },
     alarm(smokeStatus) {
       if (smokeStatus === 0) {
@@ -500,6 +508,7 @@ export default {
           this.buildData
         );
         this.buildData = this.sortChange(this.buildData);
+        this.setBuildTableList(this.buildData);
       }
     },
     handleEdit(index, row) {
@@ -534,6 +543,7 @@ export default {
       this.buildData = this.getBuildDataFromStorage();
       this.buildData = this.showSmokeAndManualAlarmButtonTitle(this.buildData);
       this.buildData = this.sortChange(this.buildData);
+      this.setBuildTableList(this.buildData);
     },
   },
   created() {

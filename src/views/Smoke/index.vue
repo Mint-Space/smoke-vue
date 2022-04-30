@@ -16,6 +16,14 @@
         <el-button
           icon="el-icon-menu"
           size="35px"
+          v-show="isShowExcel"
+          @click="exportExcel()"
+        >
+          导出Excel表格
+        </el-button>
+        <el-button
+          icon="el-icon-menu"
+          size="35px"
           v-show="isChange"
           @click="changeTable()"
         >
@@ -30,14 +38,58 @@
 </template>
 
 <script>
+import excelUtil from "@/utils/excel";
+import { mapState } from "vuex";
 export default {
   name: "CSmoke",
   data() {
     return {
       isChange: false,
+      isShowExcel: false,
+      tableList: [],
     };
   },
   methods: {
+    //导出事件
+    exportExcel() {
+      const excelFileName =
+        this.tableList[0].build + "_" + this.tableList[0].floor + ".xlsx";
+      const tableHead = [
+        {
+          title: "建筑名称",
+          dataIndex: "build",
+          key: "build",
+          className: "text-monospace",
+        },
+        {
+          title: "烟感手报楼层",
+          dataIndex: "floor",
+          key: "floor",
+        },
+        {
+          title: "烟感手报位置",
+          dataIndex: "room",
+          key: "room",
+        },
+        {
+          title: "设备联网时间",
+          dataIndex: "time",
+          key: "time",
+        },
+        {
+          title: "设备类型",
+          dataIndex: "deviceTypeTitle",
+          key: "deviceTypeTitle",
+        },
+        {
+          title: "设备状态",
+          dataIndex: "smokeStatusTitle",
+          key: "smokeStatusTitle",
+        },
+      ];
+      excelUtil.exportExcel(tableHead, this.tableList, excelFileName);
+    },
+
     isShowButton() {
       if (this.$route.path == "/smokes/building") {
         this.isChange = false;
@@ -46,14 +98,19 @@ export default {
         this.$route.path == "/smokes/table"
       ) {
         this.isChange = true;
+        // if (this.$route.path == "/smokes/table") {
+        //   this.isShowExcel = true;
+        // }
       }
     },
     changeTable() {
       if (this.$route.path == "/smokes/floor") {
+        this.isShowExcel = true;
         this.$router.push({
           name: "table",
         });
       } else if (this.$route.path == "/smokes/table") {
+        this.isShowExcel = false;
         this.$router.push({
           name: "floor",
         });
@@ -66,12 +123,19 @@ export default {
       window.localStorage.removeItem("times");
       window.localStorage.removeItem("smokeStatus");
     },
-    
   },
-  
-  
+  computed: {
+    ...mapState("buildingStore", ["buildTableList"]),
+  },
+  watch: {
+    buildTableList(newBuild) {
+      this.tableList = newBuild;
+    },
+  },
   created() {
+    console.log(this);
     this.isShowButton();
+    this.tableList = this.buildTableList;
   },
   updated() {
     this.isShowButton();
