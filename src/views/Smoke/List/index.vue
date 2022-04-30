@@ -195,7 +195,6 @@ export default {
       } else if (smokeStatus === 4) {
         return "火警";
       } else {
-        console.log(smokeStatus);
         return "异常";
       }
     },

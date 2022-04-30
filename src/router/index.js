@@ -72,7 +72,7 @@ VueRouter.prototype.push = function push(location) {
 }
 
 const router = new VueRouter({
-  mode: 'history',
+  // mode: 'history',
   base: process.env.BASE_URL,
   routes
 })
