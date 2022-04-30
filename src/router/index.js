@@ -49,7 +49,7 @@ const routes = [
           {
             path: 'list',
             name: "list",
-            component: () => import('@/views/Smoke/List')
+            component: () => import('@/views/Smoke/Table/List')
           },
           {
             path: 'table',

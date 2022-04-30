@@ -11,7 +11,7 @@
 
 <script>
 import CBuilding from "../Floor/BuildingList/Buildings";
-import CBuildingList from "../List";
+import CBuildingList from "./List";
 export default {
   name: "CTable",
   components: {
