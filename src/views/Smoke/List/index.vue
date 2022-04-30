@@ -66,7 +66,7 @@
             @click="optionSmokeStatus(scope.row)"
             effect="dark"
           >
-            {{ smokeStatusTitle(scope.$index) }}
+            {{ setSmokeStatusTitle(scope.$index) }}
           </el-tag>
         </template>
       </el-table-column>
@@ -194,12 +194,18 @@ export default {
       } else if (smokeStatus === 4) {
         return "火警";
       } else {
-        console.log(smokeStatus);
         return "异常";
       }
     },
     smokeStatusTitle(index) {
       return this.getTagName(this.buildData[index].smokeStatus);
+    },
+    setSmokeStatusTitle(index) {
+      this.buildData[index] = Object.assign({
+        ...this.buildData[index],
+        smokeStatusTitle: this.smokeStatusTitle(index),
+      });
+      return this.buildData[index].smokeStatusTitle;
     },
     alarm(smokeStatus) {
       if (smokeStatus === 0) {

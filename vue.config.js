@@ -1,7 +1,7 @@
 const { defineConfig } = require('@vue/cli-service')
 
 const path = require("path")
-const CompressionWebpackPlugin = require("compression-webpack-plugin")
+// const CompressionWebpackPlugin = require("compression-webpack-plugin")
 const productionGzipExtensions = ["js", "css"]
 
 const resolve = (dir) => path.join(__dirname, dir)
@@ -107,15 +107,15 @@ module.exports = defineConfig({
         },
       ],
     },
-    plugins: [
-      new CompressionWebpackPlugin({
-        filename: "[path][base].gzip", 
-        algorithm: "gzip",
-        test: new RegExp("\\.(" + productionGzipExtensions.join("|") + ")$"),
-        threshold: 10240, //内容超过10KB进行压缩
-        minRatio: 0.8,
-      }),
-    ],
+    // plugins: [
+    //   new CompressionWebpackPlugin({
+    //     filename: "[path][base].gzip", 
+    //     algorithm: "gzip",
+    //     test: new RegExp("\\.(" + productionGzipExtensions.join("|") + ")$"),
+    //     threshold: 10240, //内容超过10KB进行压缩
+    //     minRatio: 0.8,
+    //   }),
+    // ],
     externals: [
       {
         "./cptable": "var cptable",
