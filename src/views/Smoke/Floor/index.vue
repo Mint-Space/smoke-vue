@@ -20,12 +20,33 @@
 import CLegend from "./Legend";
 import CRooms from "./Rooms";
 import CBuildingList from "./BuildingList";
+
+// import { baiduVoice } from "@/utils/baiduVoice";
+import fs from "fs";
 export default {
   name: "CFloor",
   components: {
     CRooms,
     CBuildingList,
     CLegend,
+  },
+  mounted() {
+    // 语音合成, 附带可选参数
+    // baiduVoice.text2audio("百度语音合成测试", { spd: 0, per: 4 }).then(
+    //   function (result) {
+    //     if (result.data) {
+    //       console.log(result);
+    //       fs.writeFileSync("tts.mpVoice.mp3", result.data);
+    //     } else {
+    //       // 服务发生错误
+    //       console.log(result);
+    //     }
+    //   },
+    //   function (e) {
+    //     // 发生网络错误
+    //     console.log(e);
+    //   }
+    // );
   },
 };
 </script>

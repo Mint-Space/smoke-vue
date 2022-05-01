@@ -56,6 +56,11 @@ const routes = [
             name: "table",
             component: () => import('@/views/Smoke/Table')
           },
+          {
+            path: 'about',
+            name: "about",
+            component: () => import('@/views/About')
+          },
         ]
       }
     ]

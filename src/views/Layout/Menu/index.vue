@@ -11,7 +11,7 @@
       <i class="el-icon-location"></i>
       <span slot="title">主页</span>
     </el-menu-item>
-    <el-submenu index="/smokes" >
+    <el-submenu index="/smokes">
       <template slot="title">
         <div @click="showMenu">
           <i class="el-icon-menu"></i>
@@ -19,8 +19,11 @@
         </div>
       </template>
       <el-menu-item-group>
-        <el-menu-item index="/smokes/building" @click="showSmoke">建筑布局</el-menu-item>
+        <el-menu-item index="/smokes/building" @click="showSmoke"
+          >建筑布局</el-menu-item
+        >
         <el-menu-item index="/smokes/list">烟感列表</el-menu-item>
+        <el-menu-item index="/smokes/about">测试</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
   </el-menu>
@@ -41,10 +44,8 @@ export default {
     handleClose(key, keyPath) {
       console.log(key, keyPath);
     },
-    showMenu() {
-    },
-    showHome() {
-    },
+    showMenu() {},
+    showHome() {},
     showSmoke() {
       // window.localStorage.clear()
     },

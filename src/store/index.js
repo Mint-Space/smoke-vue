@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import { baiduVoiceAxios } from "@/utils/baiduVoice";
 
 Vue.use(Vuex)
 
@@ -953,7 +954,8 @@ const buildingStore = {
     ],
     build: {},
     buildTableList: [],
-    clickEventAndKeyboardEventCount: 0
+    clickEventAndKeyboardEventCount: 0,
+    baiduVoiceList: []
   },
   mutations: {
     GET_BUILD(state, buildConfig) {
@@ -968,6 +970,9 @@ const buildingStore = {
     },
     SET_CLICK_EVENT_AND_KEYBOARD_EVENT_COUNT(state, count) {
       state.clickEventAndKeyboardEventCount = count
+    },
+    SET_BAIDU_VOICE_LIST(state, baiduVoiceList) {
+      state.baiduVoiceList.push(baiduVoiceList)
     }
   },
   actions: {
@@ -979,6 +984,17 @@ const buildingStore = {
     },
     setClickEventAndKeyboardEventCount(context, count) {
       context.commit('SET_CLICK_EVENT_AND_KEYBOARD_EVENT_COUNT', count)
+    },
+    setBaiduVoiceList(context, baiduVoiceText) {
+      let baiduVoiceList = {
+        src: "",
+        size: "",
+      }
+      baiduVoiceAxios(baiduVoiceText).then((res) => {
+        baiduVoiceList.src = res[0].src;
+        baiduVoiceList.size = res[0].size;
+        context.commit("SET_BAIDU_VOICE_LIST", baiduVoiceList)
+      });
     }
   },
   getters: {

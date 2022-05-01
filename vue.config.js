@@ -58,30 +58,36 @@ module.exports = defineConfig({
     },
   },
   // webpack-dev-server 相关配置
-  // devServer: {
-  //   /* 自动打开浏览器 */
-  //   open: process.platform === "darwin",
-  //   port: 8080,
-  //   https: false,
-  //   // hot: 'only',
-  //   /* 使用代理 */
-  //   proxy: {
-  //     "/robogo": {
-  //       /* 目标代理服务器地址 */
-  //       target: process.env.VUE_APP_BASE_API,
-  //       /* 允许跨域 */
-  //       changeOrigin: true,
-  //       ws: true,
-  //     },
-  //     "/loki": {
-  //       /* 目标代理服务器地址 */
-  //       target: process.env.VUE_APP_BASE_API,
-  //       /* 允许跨域 */
-  //       changeOrigin: true,
-  //       ws: true,
-  //     },
-  //   },
-  // },
+  devServer: {
+    /* 自动打开浏览器 */
+    // open: process.platform === "darwin",
+    // port: 8080,
+    // https: false,
+    // hot: 'only',
+    /* 使用代理 */
+    proxy: {
+      "/baidu": {
+        /* 目标代理服务器地址 */
+        target: 'http://tsn.baidu.com/text2audio',
+        /* 允许跨域 */
+        changeOrigin: true,
+        ws: true,
+        pathRewrite: {
+          '^/baidu': '' //请求的时候使用这个api就可以
+        }
+      },
+      "/voice": {
+        /* 目标代理服务器地址 */
+        target: 'http://tsn.baidu.com/text2audio',
+        /* 允许跨域 */
+        changeOrigin: true,
+        ws: true,
+        pathRewrite: {
+          '^/voice': '' //请求的时候使用这个api就可以
+        }
+      },
+    },
+  },
   configureWebpack: {
     resolve: {
       fallback: {
