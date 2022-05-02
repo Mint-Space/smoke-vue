@@ -976,11 +976,14 @@ const buildingStore = {
     SET_BAIDU_VOICE_LIST(state, baiduVoiceLists) {
       state.baiduVoiceList.push(baiduVoiceLists)
     },
-    SET_BAIDU_VOICE_LIST_TO_NULL(state){
+    SET_BAIDU_VOICE_LIST_TO_NULL(state) {
       state.baiduVoiceList = []
     },
     SET_BAIDU_VOICE_TEXT_LIST(state, baiduVoiceTextList) {
       state.baiduVoiceTextList = baiduVoiceTextList
+    },
+    SET_BAIDU_VOICE_TEXT_LIST_TO_NULL(state) {
+      state.baiduVoiceTextList = []
     },
     CREATE_AUDIO(state) {
       if (state.audioPlayer == null) {
@@ -1014,11 +1017,14 @@ const buildingStore = {
         context.commit("SET_BAIDU_VOICE_LIST", baiduVoiceList)
       });
     },
-    setBaiduVoiceListToNull(context){
+    setBaiduVoiceListToNull(context) {
       context.commit("SET_BAIDU_VOICE_LIST_TO_NULL")
     },
     setBaiduVoiceTextList(context, baiduVoiceTextList) {
       context.commit("SET_BAIDU_VOICE_TEXT_LIST", baiduVoiceTextList)
+    },
+    setBaiduVoiceTextListToNull(context) {
+      context.commit("SET_BAIDU_VOICE_TEXT_LIST_TO_NULL")
     },
     createAudio(context) {
       context.commit("CREATE_AUDIO")

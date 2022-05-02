@@ -1,7 +1,11 @@
 <template>
   <div :style="cssVars">
     <slot></slot>
-    <div class="room" :style="{ height: heights, width: widths }" @click="$emit('optionSmokeStatus')">
+    <div
+      class="room"
+      :style="{ height: heights, width: widths }"
+      @click="$emit('optionSmokeStatus')"
+    >
       {{ roomNumber }}
     </div>
   </div>
@@ -28,7 +32,7 @@ export default {
       time: this.room.time,
       color: "rgb(55, 172, 107)",
       animationPlay: "paused",
-      opacity:'1'
+      opacity: "1",
     };
   },
   computed: {
@@ -36,7 +40,7 @@ export default {
       return {
         "--color": this.color,
         "--animationPlay": this.animationPlay,
-        '--opacity': this.opacity
+        "--opacity": this.opacity,
       };
     },
   },
@@ -44,7 +48,7 @@ export default {
     alarm() {
       if (this.alarmStatus === 0) {
         this.animationPlay = "paused";
-        this.opacity = '1'
+        this.opacity = "1";
         this.color = "rgb(55, 172, 107)";
       } else if (this.alarmStatus === 1) {
         this.animationPlay = "running";
@@ -61,15 +65,25 @@ export default {
       } else {
         this.color = "rgb(218, 218, 218)";
         this.animationPlay = "paused";
-        this.opacity = '1'
+        this.opacity = "1";
       }
     },
   },
   watch: {
-    room() {
-      this.alarmStatus = this.room.smokeStatus;
-      this.alarm();
+    room: {
+      handler(room) {
+        this.alarmStatus = room.smokeStatus;
+        this.alarm();
+        return room;
+      },
+      deep: true,
+      immediate: true,
     },
+    // room(room) {
+    //   this.alarmStatus = room.smokeStatus;
+    //   this.alarm();
+    //   return room
+    // },
   },
   created() {
     this.alarmStatus = this.room.smokeStatus;

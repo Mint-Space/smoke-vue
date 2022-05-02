@@ -67,13 +67,8 @@
       <span>{{ dialogTitle }}</span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="warning" @click="dialogVisible = false"
-          >复位</el-button
-        >
-        <el-button
-          type="danger"
-          @click="dialogVisible = false"
-          v-show="isShowAlarm"
+        <el-button type="warning" @click="setReset()">复位</el-button>
+        <el-button type="danger" @click="setMute()" v-show="isShowAlarm"
           >消音</el-button
         >
         <el-button type="primary" @click="dialogVisible = false"
@@ -86,7 +81,7 @@
 
 <script>
 import CRoom from "./Room";
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 export default {
   name: "CFloorTemplate",
   components: {
@@ -116,9 +111,11 @@ export default {
       dialogTitle: "",
       isShowAlarm: false,
       count: this.clickEventAndKeyboardEventCount | 0,
+      resetObject: [],
     };
   },
   methods: {
+    ...mapActions("buildingStore", ["setAudioMute"]),
     getRoomEven(rooms) {
       const result = [];
       rooms.forEach((room, index) => {
@@ -156,6 +153,14 @@ export default {
         } else if (room.smokeStatus == 4) {
           this.dialogTitle =
             buildName + floorName + room.room + "位置火警" + info;
+          this.resetObject.push(
+            Object.assign({
+              buildName: buildName,
+              floorName: floorName,
+              room: room.room,
+              rooms: room,
+            })
+          );
           this.isShowAlarm = true;
         } else {
           this.dialogTitle =
@@ -163,6 +168,14 @@ export default {
           this.isShowAlarm = false;
         }
       }
+    },
+    setReset() {
+      console.log(this.resetObject);
+    },
+    setMute() {
+      this.dialogVisible = false;
+      this.isShowAlarm = false;
+      this.setAudioMute();
     },
     handleClose(done) {
       this.$confirm("确认关闭？")
@@ -195,8 +208,8 @@ export default {
       }
       return fmt;
     },
-    saveBuildDataToStorage() {
-      const buildList = this.build;
+    saveBuildDataToStorage(newBuild) {
+      const buildList = newBuild;
       const build = buildList.build;
       const floor = buildList.floorName;
       const rooms = buildList.rooms;
@@ -337,7 +350,7 @@ export default {
     saveAndGet() {
       const build = window.localStorage.getItem("build");
       if ((build === "undefined") | (build === "") | (build === null)) {
-        this.saveBuildDataToStorage();
+        this.saveBuildDataToStorage(this.build);
       } else {
         this.getBuildDataFromStorage();
       }
@@ -347,9 +360,18 @@ export default {
     ...mapState("buildingStore", ["build"]),
   },
   watch: {
-    build(newBuild) {
-      this.saveBuildDataToStorage();
+    build: {
+      handler(newBuild) {
+        this.saveBuildDataToStorage(newBuild);
+        return newBuild;
+      },
+      deep: true,
+      immediate: true,
     },
+    // build(newBuild) {
+    //   this.saveBuildDataToStorage(newBuild);
+    //   return newBuild
+    // },
   },
   created() {
     this.saveAndGet();

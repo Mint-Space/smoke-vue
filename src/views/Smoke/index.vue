@@ -186,18 +186,38 @@ export default {
     ...mapState("buildingStore", ["buildingList"]),
   },
   watch: {
-    buildTableList(newBuild) {
-      this.tableList = newBuild;
+    buildTableList: {
+      handler(newBuild) {
+        this.tableList = newBuild;
+      },
+      deep: true,
+      immediate: true,
     },
-    buildingList(newBuildingList) {
-      // this.buildList = newBuildingList;
-      this.alarmPositionList = this.getAlarmPosition(newBuildingList);
-      this.alarmPositionTextList = this.setAlarmPositionTextList(
-        this.alarmPositionList
-      );
-      this.setBaiduVoiceTextList(this.alarmPositionTextList);
-      // console.log(this.alarmPositionList);
+    // buildTableList(newBuild) {
+    //   this.tableList = newBuild;
+    // },
+    buildingList: {
+      handler(newBuildingList) {
+        // this.buildList = newBuildingList;
+        this.alarmPositionList = this.getAlarmPosition(newBuildingList);
+        this.alarmPositionTextList = this.setAlarmPositionTextList(
+          this.alarmPositionList
+        );
+        this.setBaiduVoiceTextList(this.alarmPositionTextList);
+        // console.log(this.alarmPositionList);
+      },
+      deep: true,
+      immediate: true,
     },
+    // buildingList(newBuildingList) {
+    //   // this.buildList = newBuildingList;
+    //   this.alarmPositionList = this.getAlarmPosition(newBuildingList);
+    //   this.alarmPositionTextList = this.setAlarmPositionTextList(
+    //     this.alarmPositionList
+    //   );
+    //   this.setBaiduVoiceTextList(this.alarmPositionTextList);
+    //   // console.log(this.alarmPositionList);
+    // },
   },
   created() {
     this.isShowButton();

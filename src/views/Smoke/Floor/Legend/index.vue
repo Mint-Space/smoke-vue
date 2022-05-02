@@ -28,10 +28,12 @@ export default {
     ...mapActions("buildingStore", ["createAudio"]),
     ...mapActions("buildingStore", ["setAudioMute"]),
     ...mapActions("buildingStore", ["setBaiduVoiceListToNull"]),
+    ...mapActions("buildingStore", ["setBaiduVoiceTextListToNull"]),
     setMute() {
       this.isMute = false;
       this.setAudioMute();
       this.setBaiduVoiceListToNull();
+      this.setBaiduVoiceTextListToNull();
     },
     getAudioData(text) {
       this.setBaiduVoiceList(text);
@@ -79,21 +81,44 @@ export default {
     ...mapState("buildingStore", ["audioPlayer"]),
   },
   watch: {
-    baiduVoiceTextList(newBaiduVoiceTextList) {
-      this.text = newBaiduVoiceTextList;
-      this.isMute = true;
-      for (let index = 0; index < this.text.length; index++) {
-        const element = this.text[index];
-        this.getAudioData(element);
-      }
-    },
-    baiduVoiceList(newBaiduVoiceList) {
-      this.textToVoice = this.getAudioSrcArr(newBaiduVoiceList);
-      if (this.textToVoice.length > 0) {
+    baiduVoiceTextList: {
+      handler(newBaiduVoiceTextList) {
+        this.text = newBaiduVoiceTextList;
         this.isMute = true;
-        this.getAudio(this.audio, this.textToVoice);
-      }
+        for (let index = 0; index < this.text.length; index++) {
+          const element = this.text[index];
+          this.getAudioData(element);
+        }
+      },
+      // deep: true,
+      // immediate: true,
     },
+    // baiduVoiceTextList(newBaiduVoiceTextList) {
+    //   this.text = newBaiduVoiceTextList;
+    //   this.isMute = true;
+    //   for (let index = 0; index < this.text.length; index++) {
+    //     const element = this.text[index];
+    //     this.getAudioData(element);
+    //   }
+    // },
+    baiduVoiceList: {
+      handler(newBaiduVoiceList) {
+        this.textToVoice = this.getAudioSrcArr(newBaiduVoiceList);
+        if (this.textToVoice.length > 0) {
+          this.isMute = true;
+          this.getAudio(this.audio, this.textToVoice);
+        }
+      },
+      // deep: true,
+      immediate: true,
+    },
+    // baiduVoiceList(newBaiduVoiceList) {
+    //   this.textToVoice = this.getAudioSrcArr(newBaiduVoiceList);
+    //   if (this.textToVoice.length > 0) {
+    //     this.isMute = true;
+    //     this.getAudio(this.audio, this.textToVoice);
+    //   }
+    // },
   },
   mounted() {
     this.text = this.baiduVoiceTextList;

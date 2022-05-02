@@ -538,13 +538,26 @@ export default {
     },
   },
   watch: {
-    build(newBuild) {
-      this.saveBuildDataToStorage();
-      this.buildData = this.getBuildDataFromStorage();
-      this.buildData = this.showSmokeAndManualAlarmButtonTitle(this.buildData);
-      this.buildData = this.sortChange(this.buildData);
-      this.setBuildTableList(this.buildData);
+    build: {
+      handler(newBuild) {
+        this.saveBuildDataToStorage();
+        this.buildData = this.getBuildDataFromStorage();
+        this.buildData = this.showSmokeAndManualAlarmButtonTitle(
+          this.buildData
+        );
+        this.buildData = this.sortChange(this.buildData);
+        this.setBuildTableList(this.buildData);
+      },
+      deep: true,
+      immediate: true,
     },
+    // build(newBuild) {
+    //   this.saveBuildDataToStorage();
+    //   this.buildData = this.getBuildDataFromStorage();
+    //   this.buildData = this.showSmokeAndManualAlarmButtonTitle(this.buildData);
+    //   this.buildData = this.sortChange(this.buildData);
+    //   this.setBuildTableList(this.buildData);
+    // },
   },
   created() {
     this.saveAndGet();
