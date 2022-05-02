@@ -955,7 +955,9 @@ const buildingStore = {
     build: {},
     buildTableList: [],
     clickEventAndKeyboardEventCount: 0,
-    baiduVoiceList: []
+    baiduVoiceList: [],
+    baiduVoiceTextList: [],
+    audioPlayer: null
   },
   mutations: {
     GET_BUILD(state, buildConfig) {
@@ -971,8 +973,24 @@ const buildingStore = {
     SET_CLICK_EVENT_AND_KEYBOARD_EVENT_COUNT(state, count) {
       state.clickEventAndKeyboardEventCount = count
     },
-    SET_BAIDU_VOICE_LIST(state, baiduVoiceList) {
-      state.baiduVoiceList.push(baiduVoiceList)
+    SET_BAIDU_VOICE_LIST(state, baiduVoiceLists) {
+      state.baiduVoiceList.push(baiduVoiceLists)
+    },
+    SET_BAIDU_VOICE_LIST_TO_NULL(state){
+      state.baiduVoiceList = []
+    },
+    SET_BAIDU_VOICE_TEXT_LIST(state, baiduVoiceTextList) {
+      state.baiduVoiceTextList = baiduVoiceTextList
+    },
+    CREATE_AUDIO(state) {
+      if (state.audioPlayer == null) {
+        state.audioPlayer = new Audio()
+      }
+    },
+    SET_AUDIO_MUTE(state) {
+      if (state.audioPlayer != null) {
+        state.audioPlayer.pause()
+      }
     }
   },
   actions: {
@@ -995,6 +1013,18 @@ const buildingStore = {
         baiduVoiceList.size = res[0].size;
         context.commit("SET_BAIDU_VOICE_LIST", baiduVoiceList)
       });
+    },
+    setBaiduVoiceListToNull(context){
+      context.commit("SET_BAIDU_VOICE_LIST_TO_NULL")
+    },
+    setBaiduVoiceTextList(context, baiduVoiceTextList) {
+      context.commit("SET_BAIDU_VOICE_TEXT_LIST", baiduVoiceTextList)
+    },
+    createAudio(context) {
+      context.commit("CREATE_AUDIO")
+    },
+    setAudioMute(context) {
+      context.commit("SET_AUDIO_MUTE")
     }
   },
   getters: {

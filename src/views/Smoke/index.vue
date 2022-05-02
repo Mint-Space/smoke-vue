@@ -39,7 +39,7 @@
 
 <script>
 import excelUtil from "@/utils/excel";
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 export default {
   name: "CSmoke",
   data() {
@@ -47,9 +47,14 @@ export default {
       isChange: false,
       isShowExcel: false,
       tableList: [],
+      // buildList: [],
+      alarmPositionList: [],
+      alarmPositionTextList: [],
     };
   },
   methods: {
+    ...mapActions("buildingStore", ["setBaiduVoiceTextList"]),
+    ...mapActions("buildingStore", ["setBaiduVoiceListToNull"]),
     //导出事件
     exportExcel() {
       const excelFileName =
@@ -89,7 +94,56 @@ export default {
       ];
       excelUtil.exportExcel(tableHead, this.tableList, excelFileName);
     },
-
+    getAlarmPosition(buildList) {
+      const result = [];
+      buildList.forEach((build) => {
+        build.floor.forEach((position) => {
+          position.staircase.forEach((value) => {
+            if (value.smokeStatus === 4) {
+              result.push(
+                Object.assign({
+                  ...value,
+                  buildName: position.build,
+                  floorName: position.floorName,
+                })
+              );
+            }
+          });
+          position.corridor.forEach((value) => {
+            if (value.smokeStatus === 4) {
+              result.push(
+                Object.assign({
+                  ...value,
+                  buildName: position.build,
+                  floorName: position.floorName,
+                })
+              );
+            }
+          });
+          position.rooms.forEach((value) => {
+            if (value.smokeStatus === 4) {
+              result.push(
+                Object.assign({
+                  ...value,
+                  buildName: position.build,
+                  floorName: position.floorName,
+                })
+              );
+            }
+          });
+        });
+      });
+      return result;
+    },
+    setAlarmPositionTextList(alarmPositionList) {
+      const result = [];
+      let text = "";
+      alarmPositionList.forEach((item) => {
+        (text = item.buildName + item.floorName + item.room + "火警，请检查"),
+          result.push(text);
+      });
+      return result;
+    },
     isShowButton() {
       if (this.$route.path == "/smokes/building") {
         this.isChange = false;
@@ -106,6 +160,7 @@ export default {
       }
     },
     changeTable() {
+      this.setBaiduVoiceListToNull();
       if (this.$route.path == "/smokes/floor") {
         this.isShowExcel = true;
         this.$router.push({
@@ -128,14 +183,29 @@ export default {
   },
   computed: {
     ...mapState("buildingStore", ["buildTableList"]),
+    ...mapState("buildingStore", ["buildingList"]),
   },
   watch: {
     buildTableList(newBuild) {
       this.tableList = newBuild;
     },
+    buildingList(newBuildingList) {
+      // this.buildList = newBuildingList;
+      this.alarmPositionList = this.getAlarmPosition(newBuildingList);
+      this.alarmPositionTextList = this.setAlarmPositionTextList(
+        this.alarmPositionList
+      );
+      this.setBaiduVoiceTextList(this.alarmPositionTextList);
+      // console.log(this.alarmPositionList);
+    },
   },
   created() {
     this.isShowButton();
+    this.alarmPositionList = this.getAlarmPosition(this.buildingList);
+    this.alarmPositionTextList = this.setAlarmPositionTextList(
+      this.alarmPositionList
+    );
+    this.setBaiduVoiceTextList(this.alarmPositionTextList);
     if (this.buildTableList != null) {
       this.tableList = this.buildTableList;
     }

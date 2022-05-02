@@ -60,7 +60,6 @@ function baiduVoice(text) {
                         src: URL.createObjectURL(xhr.response),
                         size: xhr.response.size,
                     });
-                    console.log(baiduVoiceList);
                     return baiduVoice
                 } else {
                     //这里如果百度语音合成的接口返回类型不是audio/mp3，是json的话，代表你的参数有问题，返回结果失败，具体可以查看api文档
@@ -108,10 +107,10 @@ async function baiduVoiceAxios(text) {
                     //     blob = new Blob([data], { type: headers["content-type"] });
                     // saveAs(blob, filename)
 
-                    resultData.push({
+                    resultData.push(Object.assign({
                         src: window.URL.createObjectURL(new Blob([data.request.response], { type: data.headers["content-type"] })),
                         size: data.headers["content-length"],
-                    });
+                    }));
                     return resultData
                 } else {
                     //这里如果百度语音合成的接口返回类型不是audio/mp3，是json的话，代表你的参数有问题，返回结果失败，具体可以查看api文档

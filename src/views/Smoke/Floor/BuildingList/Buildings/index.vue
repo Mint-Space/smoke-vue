@@ -40,6 +40,7 @@ export default {
   },
   methods: {
     ...mapActions("buildingStore", ["getBuild"]),
+    ...mapActions("buildingStore", ["setBaiduVoiceListToNull"]),
     getBuildingList() {
       return this.$store.state.buildingStore.buildingList;
     },
@@ -47,6 +48,7 @@ export default {
       return this.$store.state.buildingStore.build;
     },
     setBuild(buildName, floorIndex) {
+      this.setBaiduVoiceListToNull();
       const buildConfig = {
         buildName,
         floorIndex,
